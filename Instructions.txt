@@ -1,0 +1,72 @@
+Managing your subtitles
+
+Prelude: SubRip subtitle files
+
+We all love our movies and TV shows, but the most frustrating thing is when the subtitles don’t work correctly! Sometimes they’re ahead, sometimes they’re behind, sometimes they have typos… well we’re going to fix that.
+
+Subtitles are stored in a separate file that is layered over your video file. The SubRip format is one of the formats available for those files. Entries in a SubRip, or SRT file, look like this:
+
+645
+01:31:51,210 --> 01:31:54,893
+the government is implementing a new policy...
+
+646
+01:31:54,928 --> 01:31:57,664
+In connection with a dramatic increase
+in crime in certain neighbourhoods,
+Each entry starts with a number that counts the entries. After that there's a line with the time range in which the subtitle should be displayed. The format is hours:minutes:seconds,milliseconds. The decimal separator used is the comma. Finally, there is the text for the subtitle itself. An empty line separates each subtitle entry.
+
+Iteration 1: No more delays!
+
+Sometimes the timing of the subtitles is off by a small amount, maybe 1 second or 500 milliseconds. When this happens you need to shift everything a few seconds forwards or backwards.
+
+Create a program that will take an existing SRT file and write a new SRT file with the times shifted by the amount specified.
+
+So, for example, if I were to shift a subtitle entry 2500ms ahead I would start with this:
+
+01:32:04,283 --> 01:32:07,769
+and end up with:
+
+01:32:06,783 --> 01:32:10,269
+Hints
+
+The first thing you need to do is parse the SRT file (remember IO.read and #split )
+Decide how you want to store the parsed text - in this exercise you will need to access times and the text separately
+Use the DateTime.parse method to turn the times from the SRT file to DateTime objects in Ruby. Check the documentation on the DateTime class, you’ll be using this a lot!
+After you modify the DateTime object to shift the time forward or back, you will also need the DateTime.strftime method to transform the DateTime object back to a string in the correct format.
+Review the IO.write method to create the new SRT file with the corrected times.
+Iteration 2: Flag the typos
+
+Often SRT files are made by the community and as such they contain lots of typos.
+
+Modify your program to check the text of each subtitle entry for words that are not found in your system's dictionary. On Unix-based systems you can find a file of system words in /usr/share/dict/words. Create an additional file called potential_typos.txt that contains potential typos and the times that they occurred. Each entry should have the format typo: time1, time2, time3. For example:
+
+Daenerys: 01:32:04,283 , 20:32:12,123 , 25:31:05,111
+Winterfell: 03:15:01,123 , 03:18:23,145
+...
+Make sure you don't check for words with punctuation signs attached.
+
+Iteration 3: Profanity filter
+
+Now we need to add a profanity filter. For each subtitle entry, substitute the swear words for CENSORED in a file called profanity.txt.
+
+For example, in:
+
+645
+01:31:51,210 --> 01:31:54,893
+the government is implementing a new clusterfuck...
+
+646
+01:31:54,928 --> 01:31:57,664
+In connection with a dramatic increase
+in douchebags in certain neighbourhoods,
+the resulting profanity.txt should be
+
+645
+01:31:51,210 --> 01:31:54,893
+the government is implementing a new CENSORED...
+
+646
+01:31:54,928 --> 01:31:57,664
+In connection with a dramatic increase
+in CENSORED in certain neighbourhoods,
